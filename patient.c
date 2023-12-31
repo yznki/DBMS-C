@@ -23,8 +23,7 @@ void loadPatientsFromFile(Patient *patientIndex[])
             continue;
         }
 
-        // Initialize all fields to empty strings
-        *newPatient = (const Patient){0}; // Initialize all fields to 0 / empty
+        *newPatient = (const Patient){0}; 
 
         char *ptr = line;
         int field = 0;
@@ -38,7 +37,7 @@ void loadPatientsFromFile(Patient *patientIndex[])
             size_t len = ptr - start;
             if (len > 0)
             {
-                char temp[256] = {0}; // Temporary buffer to hold the field value
+                char temp[256] = {0};
                 strncpy(temp, start, len < sizeof(temp) ? len : sizeof(temp) - 1);
 
                 switch (field)
@@ -78,12 +77,11 @@ void loadPatientsFromFile(Patient *patientIndex[])
 
             field++;
             if (*ptr)
-                ptr++; // Skip the comma
+                ptr++;
         }
 
         int index = getIndex(newPatient->patientSSN);
 
-        // Insert in sorted order
         if (patientIndex[index] == NULL || patientIndex[index]->patientSSN > newPatient->patientSSN)
         {
             newPatient->next = patientIndex[index];

@@ -375,21 +375,24 @@ void doctorTable(Doctor *doctorIndex[])
 
             if (selection == 1)
             {
-                printf("%-15s%-20s%-50s%-15s%-10s%-15s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone");
+                printf("%-15s%-20s%-50s%-15s%-10s%-15s%-25s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone", "Address");
                 for (int i = 0; i < INDEX_SIZE; i++)
                 {
                     Doctor *current = doctorIndex[i];
                     while (current != NULL)
                     {
                         char fullName[256];
+                        char fullAddress[512];
                         if (strcmp(current->mname, "") == 0) // Check if middle name is empty
                             sprintf(fullName, "%s %s", current->fname, current->lname);
                         else
                             sprintf(fullName, "%s %s %s", current->fname, current->mname, current->lname);
 
-                        printf("%-15d%-20d%-50s%-15s%-10c%-15s\n",
+                        sprintf(fullAddress, "%s, %s, %s, %s", current->street, current->city, current->state, current->country);
+
+                        printf("%-15d%-20d%-50s%-15s%-10c%-15s%-25s\n",
                                current->doctorID, current->departmentID, fullName,
-                               current->DOB, current->gender, current->phoneNumber);
+                               current->DOB, current->gender, current->phoneNumber, fullAddress);
                         current = current->next;
                     }
                 }

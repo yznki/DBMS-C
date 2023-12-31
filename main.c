@@ -3,14 +3,16 @@
 #include <string.h>
 #include "patient.h"
 #include "doctor.h"
+#include "appointment.h"
 
 int main(int argc, char const *argv[])
 {
     // system("clear");
     loadPatientsFromFile(patientIndex);
     loadDoctorsFromFile(doctorIndex);
+    loadAppointmentsFromFile(appointmentIndex);
 
-        int choice = 0;
+    int choice = 0;
     printf("Welcome to the Jordanian Hospital\n");
 
     while (choice != 6)
@@ -41,8 +43,9 @@ int main(int argc, char const *argv[])
             break;
         case 3:
             system("clear");
-            // appointmentTable();
+            appointmentTable(appointmentIndex, doctorIndex, patientIndex);
             system("clear");
+            saveAppointmentsToFile(appointmentIndex);
             break;
         case 4:
             system("clear");
@@ -59,6 +62,7 @@ int main(int argc, char const *argv[])
             printf("\n\n\n Goodbye! \n\n\n");
             freeDoctorList(doctorIndex);
             freePatientList(patientIndex);
+            freeAppointmentList(appointmentIndex);
             break;
         default:
             system("clear");
