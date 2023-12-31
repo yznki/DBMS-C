@@ -5,7 +5,7 @@ typedef struct Patient
 {
     int patientSSN;
     char fname[256], mname[256], lname[256], DOB[256];
-    char genderStr[3], phoneNumber[11], street[256], city[256], state[256], country[256];
+    char genderStr[3], street[256], city[256], state[256], country[256];
     char gender;
     struct Patient *next;
 } Patient;

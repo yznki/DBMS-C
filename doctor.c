@@ -23,10 +23,65 @@ void loadDoctorsFromFile(Doctor *doctorIndex[])
             continue;
         }
 
-        sscanf(line, "%d,%d,%255[^,],%255[^,],%255[^,],%255[^,],%c,%11[^,],%255[^,],%255[^,],%255[^,],%255[^,\n]",
-               &newDoctor->doctorID, &newDoctor->departmentID, newDoctor->fname, newDoctor->mname, newDoctor->lname,
-               newDoctor->DOB, &newDoctor->gender, newDoctor->phoneNumber, newDoctor->street,
-               newDoctor->city, newDoctor->state, newDoctor->country);
+        *newDoctor = (const Doctor){0}; 
+
+        char *start = line;
+        char *end;
+        int field = 0;
+        while (field < 12 && *start)
+        {
+            end = start;
+            while (*end && *end != ',' && *end != '\n')
+                end++;
+
+            char value[256] = {0};
+            int len = end - start < sizeof(value) - 1 ? end - start : sizeof(value) - 1;
+            strncpy(value, start, len);
+            value[len] = '\0';
+
+            switch (field)
+            {
+            case 0:
+                newDoctor->doctorID = atoi(value);
+                break;
+            case 1:
+                newDoctor->departmentID = atoi(value);
+                break;
+            case 2:
+                strncpy(newDoctor->fname, value, sizeof(newDoctor->fname));
+                break;
+            case 3:
+                strncpy(newDoctor->mname, value, sizeof(newDoctor->mname));
+                break;
+            case 4:
+                strncpy(newDoctor->lname, value, sizeof(newDoctor->lname));
+                break;
+            case 5:
+                strncpy(newDoctor->DOB, value, sizeof(newDoctor->DOB));
+                break;
+            case 6:
+                newDoctor->gender = value[0];
+                break;
+            case 7:
+                strncpy(newDoctor->phoneNumber, value, sizeof(newDoctor->phoneNumber));
+                break;
+            case 8:
+                strncpy(newDoctor->street, value, sizeof(newDoctor->street));
+                break;
+            case 9:
+                strncpy(newDoctor->city, value, sizeof(newDoctor->city));
+                break;
+            case 10:
+                strncpy(newDoctor->state, value, sizeof(newDoctor->state));
+                break;
+            case 11:
+                strncpy(newDoctor->country, value, sizeof(newDoctor->country));
+                break;
+            }
+
+            start = *end ? end + 1 : end;
+            field++;
+        }
 
         int index = getIndex(newDoctor->doctorID);
 
@@ -113,19 +168,46 @@ void doctorTable(Doctor *doctorIndex[])
             while (continueInsertion == 1)
             {
                 Doctor newDoctor;
-                printf("Enter doctorID: ");
-                if (scanf("%d", &newDoctor.doctorID) != 1 || newDoctor.doctorID == 0)
+                printf("\n\nAnything with '*' is required.\n\n");
+                printf("Enter doctorID * or 0 to exit: ");
+                if (scanf("%d", &newDoctor.doctorID) != 1)
                 {
                     printf("Doctor ID cannot be empty/zero/character.\n");
                     while (getchar() != '\n')
                         ;
                     continue;
                 }
+
+                if (newDoctor.doctorID == 0)
+                {
+                    break;
+                }
+
+                int index = getIndex(newDoctor.doctorID);
+                Doctor *current = doctorIndex[index];
+                int idAlreadyExists = 0;
+
+                while (current != NULL)
+                {
+                    if (current->doctorID == newDoctor.doctorID)
+                    {
+                        idAlreadyExists = 1;
+                        break;
+                    }
+                    current = current->next;
+                }
+
+                if (idAlreadyExists)
+                {
+                    printf("\n\nError: A doctor with ID %d already exists.\n\n", newDoctor.doctorID);
+                    continue;
+                }
+
                 while (getchar() != '\n')
                     ;
 
-                printf("Enter Department ID: ");
-                if (scanf("%d", &newDoctor.departmentID) != 1)
+                printf("Enter Department ID *: ");
+                if (scanf("%d", &newDoctor.departmentID) != 1 || newDoctor.departmentID == 0)
                 {
                     printf("Invalid input for Department ID.\n");
                     while (getchar() != '\n')
@@ -135,27 +217,46 @@ void doctorTable(Doctor *doctorIndex[])
                 while (getchar() != '\n')
                     ;
 
-                printf("Enter First Name: ");
+                printf("Enter First Name *: ");
                 fgets(newDoctor.fname, sizeof(newDoctor.fname), stdin);
                 newDoctor.fname[strcspn(newDoctor.fname, "\n")] = 0;
+                if (strlen(newDoctor.fname) == 0)
+                {
+                    printf("\nFirst name cannot be empty.\nTry Again...\n\n");
+                    continue;
+                }
 
                 printf("Enter Middle Name: ");
                 fgets(newDoctor.mname, sizeof(newDoctor.mname), stdin);
                 newDoctor.mname[strcspn(newDoctor.mname, "\n")] = 0;
 
-                printf("Enter Last Name: ");
+                printf("Enter Last Name *: ");
                 fgets(newDoctor.lname, sizeof(newDoctor.lname), stdin);
                 newDoctor.lname[strcspn(newDoctor.lname, "\n")] = 0;
+                if (strlen(newDoctor.fname) == 0)
+                {
+                    printf("\nLast name cannot be empty.\nTry Again...\n\n");
+                    continue;
+                }
 
-                printf("Enter Date of Birth (DD-MM-YYYY): ");
+                printf("Enter Date of Birth (DD-MM-YYYY) *: ");
                 fgets(newDoctor.DOB, sizeof(newDoctor.DOB), stdin);
                 newDoctor.DOB[strcspn(newDoctor.DOB, "\n")] = 0;
+                if (strlen(newDoctor.fname) == 0)
+                {
+                    printf("\nDate of Birth cannot be empty.\nTry Again...\n\n");
+                    continue;
+                }
 
                 do
                 {
-                    printf("Enter Gender (M or F): ");
+                    printf("Enter Gender (M or F) *: ");
                     fgets(newDoctor.genderStr, sizeof(newDoctor.genderStr), stdin);
                     newDoctor.gender = newDoctor.genderStr[0];
+                    if (newDoctor.gender != 'F' && newDoctor.gender != 'M')
+                    {
+                        printf("\nPlease choose M or F.\n");
+                    }
                 } while (newDoctor.gender != 'M' && newDoctor.gender != 'F');
 
                 printf("Enter Phone Number: ");
@@ -178,32 +279,23 @@ void doctorTable(Doctor *doctorIndex[])
                 fgets(newDoctor.country, sizeof(newDoctor.country), stdin);
                 newDoctor.country[strcspn(newDoctor.country, "\n")] = 0;
 
-                int index = getIndex(newDoctor.doctorID);
-                Doctor *current = doctorIndex[index];
-                int idAlreadyExists = 0;
-
-                while (current != NULL)
-                {
-                    if (current->doctorID == newDoctor.doctorID)
-                    {
-                        idAlreadyExists = 1;
-                        break;
-                    }
-                    current = current->next;
-                }
-
-                if (idAlreadyExists)
-                {
-                    printf("\n\nError: A doctor with ID %d already exists.\n\n", newDoctor.doctorID);
-                    continue;
-                }
-
                 Doctor *newNode = (Doctor *)malloc(sizeof(Doctor));
                 if (newNode == NULL)
                 {
                     perror("Error allocating memory");
                     continue;
                 }
+
+                newNode->fname[0] = '\0';
+                newNode->mname[0] = '\0';
+                newNode->lname[0] = '\0';
+                newNode->DOB[0] = '\0';
+                newNode->street[0] = '\0';
+                newNode->city[0] = '\0';
+                newNode->state[0] = '\0';
+                newNode->country[0] = '\0';
+                newNode->phoneNumber[0] = '\0';
+
                 *newNode = newDoctor;
                 newNode->next = doctorIndex[index];
                 doctorIndex[index] = newNode;
@@ -229,8 +321,13 @@ void doctorTable(Doctor *doctorIndex[])
             {
                 if (deletion == 1)
                 {
-                    printf("Enter ID of Doctor to delete: ");
+                    printf("Enter ID of Doctor to delete or 0 to exit: ");
                     scanf("%d", &doctorID);
+
+                    if (doctorID == 0)
+                    {
+                        break;
+                    }
 
                     int index = getIndex(doctorID);
                     Doctor *current = doctorIndex[index], *prev = NULL;
@@ -278,15 +375,24 @@ void doctorTable(Doctor *doctorIndex[])
 
             if (selection == 1)
             {
-                printf("Doctor ID\tDepartment ID\tName\t\t\t\tDOB\t\tGender\tPhone\n");
+                printf("%-15s%-20s%-50s%-15s%-10s%-15s%-25s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone", "Address");
                 for (int i = 0; i < INDEX_SIZE; i++)
                 {
                     Doctor *current = doctorIndex[i];
                     while (current != NULL)
                     {
-                        printf("%d\t\t%d\t\t%s %s %s\t\t%s\t%c\t%s\n",
-                               current->doctorID, current->departmentID, current->fname, current->mname, current->lname,
-                               current->DOB, current->gender, current->phoneNumber);
+                        char fullName[256];
+                        char fullAddress[512];
+                        if (strcmp(current->mname, "") == 0) // Check if middle name is empty
+                            sprintf(fullName, "%s %s", current->fname, current->lname);
+                        else
+                            sprintf(fullName, "%s %s %s", current->fname, current->mname, current->lname);
+
+                        sprintf(fullAddress, "%s, %s, %s, %s", current->street, current->city, current->state, current->country);
+
+                        printf("%-15d%-20d%-50s%-15s%-10c%-15s%-25s\n",
+                               current->doctorID, current->departmentID, fullName,
+                               current->DOB, current->gender, current->phoneNumber, fullAddress);
                         current = current->next;
                     }
                 }
@@ -302,7 +408,6 @@ void doctorTable(Doctor *doctorIndex[])
                 scanf("%d", &filterChoice);
                 printf("\n\n\n");
 
-
                 switch (filterChoice)
                 {
                 case 1:
@@ -315,13 +420,19 @@ void doctorTable(Doctor *doctorIndex[])
                     int index = getIndex(doctorID);
                     Doctor *current = doctorIndex[index];
                     int found = 0;
-                    printf("Doctor ID\tDepartment ID\tName\t\t\tDOB\t\tGender\tPhone\n");
+                    printf("%-15s%-20s%-50s%-15s%-10s%-15s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone");
                     while (current != NULL)
                     {
                         if (current->doctorID == doctorID)
                         {
-                            printf("%d\t\t%d\t\t%s %s %s\t%s\t%c\t%s\n",
-                                   current->doctorID, current->departmentID, current->fname, current->mname, current->lname,
+                            char fullName[256];
+                            if (strcmp(current->mname, "") == 0)
+                                sprintf(fullName, "%s %s", current->fname, current->lname);
+                            else
+                                sprintf(fullName, "%s %s %s", current->fname, current->mname, current->lname);
+
+                            printf("%-15d%-20d%-50s%-15s%-10c%-15s\n",
+                                   current->doctorID, current->departmentID, fullName,
                                    current->DOB, current->gender, current->phoneNumber);
                             found = 1;
                             break;
@@ -343,7 +454,7 @@ void doctorTable(Doctor *doctorIndex[])
                     printf("\n\n\n");
 
                     int found = 0;
-                    printf("Doctor ID\tDepartment ID\tName\t\t\tDOB\t\tGender\tPhone\n"); 
+                    printf("%-15s%-20s%-50s%-15s%-10s%-15s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone");
                     for (int i = 0; i < INDEX_SIZE; i++)
                     {
                         Doctor *current = doctorIndex[i];
@@ -351,8 +462,14 @@ void doctorTable(Doctor *doctorIndex[])
                         {
                             if (current->departmentID == deptID)
                             {
-                                printf("%d\t\t%d\t\t%s %s %s\t%s\t%c\t%s\n",
-                                       current->doctorID, current->departmentID, current->fname, current->mname, current->lname,
+                                char fullName[256];
+                                if (strcmp(current->mname, "") == 0)
+                                    sprintf(fullName, "%s %s", current->fname, current->lname);
+                                else
+                                    sprintf(fullName, "%s %s %s", current->fname, current->mname, current->lname);
+
+                                printf("%-15d%-20d%-50s%-15s%-10c%-15s\n",
+                                       current->doctorID, current->departmentID, fullName,
                                        current->DOB, current->gender, current->phoneNumber);
                                 found = 1;
                             }
@@ -378,7 +495,7 @@ void doctorTable(Doctor *doctorIndex[])
                     printf("\n\n\n");
 
                     int found = 0;
-                    printf("Doctor ID\tDepartment ID\tName\t\t\tDOB\t\tGender\tPhone\n");
+                    printf("%-15s%-20s%-50s%-15s%-10s%-15s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone");
                     for (int i = 0; i < INDEX_SIZE; i++)
                     {
                         Doctor *current = doctorIndex[i];
@@ -386,8 +503,14 @@ void doctorTable(Doctor *doctorIndex[])
                         {
                             if (strstr(current->fname, name) || strstr(current->mname, name) || strstr(current->lname, name))
                             {
-                                printf("%d\t\t%d\t\t%s %s %s\t%s\t%c\t%s\n",
-                                       current->doctorID, current->departmentID, current->fname, current->mname, current->lname,
+                                char fullName[256];
+                                if (strcmp(current->mname, "") == 0)
+                                    sprintf(fullName, "%s %s", current->fname, current->lname);
+                                else
+                                    sprintf(fullName, "%s %s %s", current->fname, current->mname, current->lname);
+
+                                printf("%-15d%-20d%-50s%-15s%-10c%-15s\n",
+                                       current->doctorID, current->departmentID, fullName,
                                        current->DOB, current->gender, current->phoneNumber);
                                 found = 1;
                             }
@@ -420,8 +543,13 @@ void doctorTable(Doctor *doctorIndex[])
 
         case 4:;
             int doctorIDToUpdate;
-            printf("Enter ID of Doctor to update: ");
+            printf("Enter ID of Doctor to update or 0 to exit: ");
             scanf("%d", &doctorIDToUpdate);
+
+            if (doctorIDToUpdate == 0)
+            {
+                break;
+            }
 
             int indexToUpdate = getIndex(doctorIDToUpdate);
             Doctor *currentToUpdate = doctorIndex[indexToUpdate];
