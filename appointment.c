@@ -132,7 +132,7 @@ bool existsInDoctorTable(int doctorID, Doctor *doctorIndex[])
         }
         current = current->next;
     }
-    return false; 
+    return false;
 }
 
 bool existsInPatientTable(int patientID, Patient *patientIndex[])
@@ -154,8 +154,8 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
 {
 
     Appointment newAppointment;
-    int choice;
-    
+    int choice = 0;
+
     while (choice != 5)
     {
         system("clear");
@@ -286,11 +286,11 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
                         if (current->ID == appointmentID)
                         {
                             if (prev == NULL)
-                            { // Appointment is the first node in the list
+                            { 
                                 appointmentIndex[index] = current->next;
                             }
                             else
-                            { // Appointment is not the first node
+                            { 
                                 prev->next = current->next;
                             }
                             free(current);
@@ -352,7 +352,7 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
                 scanf("%d", &filterChoice);
                 printf("\n\n\n");
 
-                int found = 0; 
+                int found = 0;
 
                 switch (filterChoice)
                 {
@@ -466,7 +466,7 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
                 printf("Current Date: %s\n", current->date);
                 printf("Enter new Date (DD-MM-YYYY): ");
                 while (getchar() != '\n')
-                    ; 
+                    ;
                 fgets(current->date, sizeof(current->date), stdin);
                 current->date[strcspn(current->date, "\n")] = 0;
                 printf("Date updated to %s for Appointment ID %d.\n", current->date, appointmentID);
@@ -482,10 +482,4 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
             break;
         }
     }
-    
-
-    
-    
-        
-    
 }
