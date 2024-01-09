@@ -375,7 +375,7 @@ void doctorTable(Doctor *doctorIndex[])
 
             if (selection == 1)
             {
-                printf("%-15s%-20s%-50s%-15s%-10s%-15s%-25s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone", "Address");
+                printf("%-15s%-20s%-30s%-15s%-10s%-15s%-25s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone", "Address");
                 for (int i = 0; i < INDEX_SIZE; i++)
                 {
                     Doctor *current = doctorIndex[i];
@@ -390,7 +390,7 @@ void doctorTable(Doctor *doctorIndex[])
 
                         sprintf(fullAddress, "%s, %s, %s, %s", current->street, current->city, current->state, current->country);
 
-                        printf("%-15d%-20d%-50s%-15s%-10c%-15s%-25s\n",
+                        printf("%-15d%-20d%-30s%-15s%-10c%-15s%-25s\n",
                                current->doctorID, current->departmentID, fullName,
                                current->DOB, current->gender, current->phoneNumber, fullAddress);
                         current = current->next;
@@ -420,7 +420,7 @@ void doctorTable(Doctor *doctorIndex[])
                     int index = getIndex(doctorID);
                     Doctor *current = doctorIndex[index];
                     int found = 0;
-                    printf("%-15s%-20s%-50s%-15s%-10s%-15s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone");
+                    printf("%-15s%-20s%-30s%-15s%-10s%-15s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone");
                     while (current != NULL)
                     {
                         if (current->doctorID == doctorID)
@@ -431,7 +431,7 @@ void doctorTable(Doctor *doctorIndex[])
                             else
                                 sprintf(fullName, "%s %s %s", current->fname, current->mname, current->lname);
 
-                            printf("%-15d%-20d%-50s%-15s%-10c%-15s\n",
+                            printf("%-15d%-20d%-30s%-15s%-10c%-15s\n",
                                    current->doctorID, current->departmentID, fullName,
                                    current->DOB, current->gender, current->phoneNumber);
                             found = 1;
@@ -454,7 +454,7 @@ void doctorTable(Doctor *doctorIndex[])
                     printf("\n\n\n");
 
                     int found = 0;
-                    printf("%-15s%-20s%-50s%-15s%-10s%-15s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone");
+                    printf("%-15s%-20s%-30s%-15s%-10s%-15s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone");
                     for (int i = 0; i < INDEX_SIZE; i++)
                     {
                         Doctor *current = doctorIndex[i];
@@ -468,7 +468,7 @@ void doctorTable(Doctor *doctorIndex[])
                                 else
                                     sprintf(fullName, "%s %s %s", current->fname, current->mname, current->lname);
 
-                                printf("%-15d%-20d%-50s%-15s%-10c%-15s\n",
+                                printf("%-15d%-20d%-30s%-15s%-10c%-15s\n",
                                        current->doctorID, current->departmentID, fullName,
                                        current->DOB, current->gender, current->phoneNumber);
                                 found = 1;
@@ -495,7 +495,7 @@ void doctorTable(Doctor *doctorIndex[])
                     printf("\n\n\n");
 
                     int found = 0;
-                    printf("%-15s%-20s%-50s%-15s%-10s%-15s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone");
+                    printf("%-15s%-20s%-30s%-15s%-10s%-15s\n", "Doctor ID", "Department ID", "Name", "DOB", "Gender", "Phone");
                     for (int i = 0; i < INDEX_SIZE; i++)
                     {
                         Doctor *current = doctorIndex[i];
@@ -509,7 +509,7 @@ void doctorTable(Doctor *doctorIndex[])
                                 else
                                     sprintf(fullName, "%s %s %s", current->fname, current->mname, current->lname);
 
-                                printf("%-15d%-20d%-50s%-15s%-10c%-15s\n",
+                                printf("%-15d%-20d%-30s%-15s%-10c%-15s\n",
                                        current->doctorID, current->departmentID, fullName,
                                        current->DOB, current->gender, current->phoneNumber);
                                 found = 1;
@@ -590,7 +590,7 @@ void doctorTable(Doctor *doctorIndex[])
                     break;
 
                 case 3:
-                    printf("Enter new Phone Number: ");
+                    printf("Enter new Phone Number (+9627xxxxxxxx): ");
                     scanf("%s", currentToUpdate->phoneNumber);
                     printf("Phone number updated.\n");
                     break;
