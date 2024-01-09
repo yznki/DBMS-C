@@ -5,6 +5,7 @@
 #include "doctor.h"
 #include "appointment.h"
 #include "bill.h"
+#include "patientPhones.h"
 
 int main(int argc, char const *argv[])
 {
@@ -13,6 +14,7 @@ int main(int argc, char const *argv[])
     loadDoctorsFromFile(doctorIndex);
     loadAppointmentsFromFile(appointmentIndex);
     loadBillsFromFile(billIndex);
+    loadPatientPhonesFromFile(patientPhonesIndex);
 
     int choice = 0;
     printf("Welcome to the Jordanian Hospital\n");
@@ -57,8 +59,9 @@ int main(int argc, char const *argv[])
             break;
         case 5:
             system("clear");
-            // diagnosisTable();
+            patientPhonesTable(patientPhonesIndex, patientIndex);
             system("clear");
+            savePatientPhonesToFile(patientPhonesIndex);
             break;
         case 6:
             system("clear");
@@ -67,6 +70,7 @@ int main(int argc, char const *argv[])
             freePatientList(patientIndex);
             freeAppointmentList(appointmentIndex);
             freeBillList(billIndex);
+            freePatientPhonesList(patientPhonesIndex);
             break;
         default:
             system("clear");
