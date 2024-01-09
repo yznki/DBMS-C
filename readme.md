@@ -28,7 +28,7 @@ cd DBMS-C
 ### Compilation and Execution
 Compile the source code using your C compiler. For GCC, use:
 ```bash
-gcc -o hospital_system main.c appointment.c bill.c patient.c doctor.c utils.c -I .
+gcc -o hospital_system main.c appointment.c bill.c patientPhones.c patient.c doctor.c utils.c -I .
 ```
 To run the application:
 ```bash
