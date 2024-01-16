@@ -160,6 +160,50 @@ bool existsInPatientTable(int patientID, Patient *patientIndex[])
     return false;
 }
 
+char *doctorName(int id)
+{
+    int index = getIndex(id);
+    Doctor *current = doctorIndex[index];
+
+    while (current != NULL)
+    {
+        if (current->doctorID == id)
+        {
+            char *name = malloc(512 * sizeof(char));
+            if (name == NULL)
+            {
+                return NULL;
+            }
+            snprintf(name, 512, "%s %s", current->fname, current->lname);
+            return name;
+        }
+        current = current->next;
+    }
+    return NULL;
+}
+
+char *patientName(int ssn)
+{
+    int index = getIndex(ssn);
+    Patient *current = patientIndex[index];
+
+    while (current != NULL)
+    {
+        if (current->patientSSN == ssn)
+        {
+            char *name = malloc(512 * sizeof(char));
+            if (name == NULL)
+            {
+                return NULL;
+            }
+            snprintf(name, 512, "%s %s", current->fname, current->lname);
+            return name;
+        }
+        current = current->next;
+    }
+    return NULL;
+}
+
 void *printAppointmentInfo(void *arg)
 {
     int *range = (int *)arg;
@@ -171,7 +215,11 @@ void *printAppointmentInfo(void *arg)
         Appointment *current = appointmentIndex[i];
         while (current != NULL)
         {
-            printf("%-15d%-15d%-15d%-20s\n", current->ID, current->doctorID, current->patientID, current->date);
+            char *dName = doctorName(current->doctorID);
+            char *pName = patientName(current->patientID);
+            printf("%-20d%-32s%-32s%-20s\n", current->ID, dName, pName, current->date);
+            free(dName);
+            free(pName);
             current = current->next;
         }
     }
@@ -315,11 +363,11 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
                         if (current->ID == appointmentID)
                         {
                             if (prev == NULL)
-                            { 
+                            {
                                 appointmentIndex[index] = current->next;
                             }
                             else
-                            { 
+                            {
                                 prev->next = current->next;
                             }
                             free(current);
@@ -358,7 +406,7 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
 
             if (selection == 1)
             {
-                printf("%-15s%-15s%-15s%-20s\n", "Appointment ID", "Doctor ID", "Patient ID", "Date");
+                printf("%-20s%-32s%-32s%-20s\n", "Appointment ID", "Doctor ID", "Patient ID", "Date");
                 pthread_t threads[2];
                 int ranges[4] = {0, INDEX_SIZE / 2, INDEX_SIZE / 2, INDEX_SIZE};
 
@@ -386,7 +434,7 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
                 case 1:
                     printf("Enter Appointment ID: ");
                     scanf("%d", &searchID);
-                    printf("%-15s%-15s%-15s%-20s\n", "Appointment ID", "Doctor ID", "Patient ID", "Date");
+                    printf("%-20s%-32s%-32s%-20s\n", "Appointment ID", "Doctor ID", "Patient ID", "Date");
                     for (int i = 0; i < INDEX_SIZE; i++)
                     {
                         Appointment *current = appointmentIndex[i];
@@ -394,9 +442,11 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
                         {
                             if (current->ID == searchID)
                             {
-                                printf("%-15d%-15d%-15d%-20s\n",
-                                       current->ID, current->doctorID, current->patientID, current->date);
-                                found = 1;
+                                char *dName = doctorName(current->doctorID);
+                                char *pName = patientName(current->patientID);
+                                printf("%-20d%-32s%-32s%-20s\n", current->ID, dName, pName, current->date);
+                                free(dName);
+                                free(pName);
                             }
                             current = current->next;
                         }
@@ -409,7 +459,7 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
                 case 2:
                     printf("Enter Doctor ID: ");
                     scanf("%d", &searchID);
-                    printf("%-15s%-15s%-15s%-20s\n", "Appointment ID", "Doctor ID", "Patient ID", "Date");
+                    printf("%-20s%-32s%-32s%-20s\n", "Appointment ID", "Doctor ID", "Patient ID", "Date");
                     for (int i = 0; i < INDEX_SIZE; i++)
                     {
                         Appointment *current = appointmentIndex[i];
@@ -417,8 +467,11 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
                         {
                             if (current->doctorID == searchID)
                             {
-                                printf("%-15d%-15d%-15d%-20s\n",
-                                       current->ID, current->doctorID, current->patientID, current->date);
+                                char *dName = doctorName(current->doctorID);
+                                char *pName = patientName(current->patientID);
+                                printf("%-20d%-32s%-32s%-20s\n", current->ID, dName, pName, current->date);
+                                free(dName);
+                                free(pName);
                                 found = 1;
                             }
                             current = current->next;
@@ -432,7 +485,7 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
                 case 3:
                     printf("Enter Patient ID: ");
                     scanf("%d", &searchID);
-                    printf("%-15s%-15s%-15s%-20s\n", "Appointment ID", "Doctor ID", "Patient ID", "Date");
+                    printf("%-20s%-32s%-32s%-20s\n", "Appointment ID", "Doctor ID", "Patient ID", "Date");
                     for (int i = 0; i < INDEX_SIZE; i++)
                     {
                         Appointment *current = appointmentIndex[i];
@@ -440,8 +493,11 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
                         {
                             if (current->patientID == searchID)
                             {
-                                printf("%-15d%-15d%-15d%-20s\n",
-                                       current->ID, current->doctorID, current->patientID, current->date);
+                                char *dName = doctorName(current->doctorID);
+                                char *pName = patientName(current->patientID);
+                                printf("%-20d%-32s%-32s%-20s\n", current->ID, dName, pName, current->date);
+                                free(dName);
+                                free(pName);
                                 found = 1;
                             }
                             current = current->next;
