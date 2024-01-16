@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 
 void loadPatientsFromFile(Patient *patientIndex[])
 {
@@ -11,6 +12,14 @@ void loadPatientsFromFile(Patient *patientIndex[])
     if (file == NULL)
     {
         perror("Error opening file");
+        return;
+    }
+
+    // Read and discard the first line
+    if (fgets(line, sizeof(line), file) == NULL)
+    {
+        perror("Error reading file");
+        fclose(file);
         return;
     }
 
@@ -111,6 +120,8 @@ void savePatientsToFile(Patient *patientIndex[])
         return;
     }
 
+    fprintf(file, "PatientSSN,First Name,Middle Name,Last Name,Date of Birth,Gender,Street,City,State,Country\n");
+
     for (int i = 0; i < INDEX_SIZE; i++)
     {
         Patient *current = patientIndex[i];
@@ -140,6 +151,34 @@ void freePatientList(Patient *patientIndex[])
         }
         patientIndex[i] = NULL;
     }
+}
+
+void *printPatientInfo(void *arg)
+{
+    int *range = (int *)arg;
+    int start = range[0];
+    int end = range[1];
+
+    for (int i = start; i < end; i++)
+    {
+        Patient *current = patientIndex[i];
+        while (current != NULL)
+        {
+            char fullName[512], address[512];
+            if (strcmp(current->mname, "") == 0) // Check if middle name is empty
+                sprintf(fullName, "%s %s", current->fname, current->lname);
+            else
+                sprintf(fullName, "%s %s %s", current->fname, current->mname, current->lname);
+
+            sprintf(address, "%s %s %s %s", current->street, current->city, current->state, current->country);
+
+            printf("%-15d%-50s%-15s%-10c%-50s\n",
+                   current->patientSSN, fullName, current->DOB, current->gender, address);
+            current = current->next;
+        }
+    }
+
+    return NULL;
 }
 
 void patientTable(Patient *patientIndex[])
@@ -376,24 +415,14 @@ void patientTable(Patient *patientIndex[])
             if (selection == 1)
             {
                 printf("%-15s%-50s%-15s%-10s%-50s\n", "Patient SSN", "Name", "DOB", "Gender", "Address");
-                for (int i = 0; i < INDEX_SIZE; i++)
-                {
-                    Patient *current = patientIndex[i];
-                    while (current != NULL)
-                    {
-                        char fullName[512], address[512];
-                        if (strcmp(current->mname, "") == 0) // Check if middle name is empty
-                            sprintf(fullName, "%s %s", current->fname, current->lname);
-                        else
-                            sprintf(fullName, "%s %s %s", current->fname, current->mname, current->lname);
+                pthread_t threads[2];
+                int ranges[4] = {0, INDEX_SIZE / 2, INDEX_SIZE / 2, INDEX_SIZE};
 
-                        sprintf(address, "%s %s %s %s", current->street, current->city, current->state, current->country);
+                pthread_create(&threads[0], NULL, printPatientInfo, &ranges[0]);
+                pthread_create(&threads[1], NULL, printPatientInfo, &ranges[2]);
 
-                        printf("%-15d%-50s%-15s%-10c%-50s\n",
-                               current->patientSSN, fullName, current->DOB, current->gender, address);
-                        current = current->next;
-                    }
-                }
+                pthread_join(threads[0], NULL);
+                pthread_join(threads[1], NULL);
             }
             else if (selection == 2)
             {

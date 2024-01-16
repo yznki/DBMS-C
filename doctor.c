@@ -14,6 +14,14 @@ void loadDoctorsFromFile(Doctor *doctorIndex[])
         return;
     }
 
+    // Read and discard the first line
+    if (fgets(line, sizeof(line), file) == NULL)
+    {
+        perror("Error reading file");
+        fclose(file);
+        return;
+    }
+
     while (fgets(line, sizeof(line), file))
     {
         Doctor *newDoctor = (Doctor *)malloc(sizeof(Doctor));

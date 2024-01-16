@@ -6,17 +6,26 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <pthread.h>
 
 void loadAppointmentsFromFile(Appointment *appointmentIndex[])
 {
     FILE *file = fopen("appointments.csv", "r");
+    char line[1024];
     if (file == NULL)
     {
         perror("Error opening file");
         return;
     }
 
-    char line[1024];
+    // Read and discard the first line
+    if (fgets(line, sizeof(line), file) == NULL)
+    {
+        perror("Error reading file");
+        fclose(file);
+        return;
+    }
+
     while (fgets(line, sizeof(line), file))
     {
         size_t len = strlen(line);
@@ -81,6 +90,34 @@ void loadAppointmentsFromFile(Appointment *appointmentIndex[])
     fclose(file);
 }
 
+void *saveAppointmentsRange(void *args)
+{
+    int *range = (int *)args;
+    int start = range[0];
+    int end = range[1];
+
+    FILE *file = fopen("appointments.csv", "a");
+    if (file == NULL)
+    {
+        perror("Error opening file");
+        return NULL;
+    }
+
+    for (int i = start; i < end; i++)
+    {
+        Appointment *current = appointmentIndex[i];
+        while (current != NULL)
+        {
+            fprintf(file, "%d,%d,%d,%s\n",
+                    current->ID, current->doctorID, current->patientID, current->date);
+            current = current->next;
+        }
+    }
+
+    fclose(file);
+    return NULL;
+}
+
 void saveAppointmentsToFile(Appointment *appointmentIndex[])
 {
     FILE *file = fopen("appointments.csv", "w");
@@ -90,17 +127,16 @@ void saveAppointmentsToFile(Appointment *appointmentIndex[])
         return;
     }
 
-    for (int i = 0; i < INDEX_SIZE; i++)
-    {
+    fprintf(file, "Appointment ID,Doctor ID,Patient SSN,Appointment Date\n");
 
-        Appointment *current = appointmentIndex[i];
-        while (current != NULL)
-        {
-            fprintf(file, "%d,%d,%d,%s\n",
-                    current->ID, current->doctorID, current->patientID, current->date);
-            current = current->next;
-        }
-    }
+    pthread_t threads[2];
+    int ranges[4] = {0, INDEX_SIZE / 2, INDEX_SIZE / 2, INDEX_SIZE};
+
+    pthread_create(&threads[0], NULL, saveAppointmentsRange, &ranges[0]);
+    pthread_create(&threads[1], NULL, saveAppointmentsRange, &ranges[2]);
+
+    pthread_join(threads[0], NULL);
+    pthread_join(threads[1], NULL);
 
     fclose(file);
 }

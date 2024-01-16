@@ -18,6 +18,15 @@ void loadPatientPhonesFromFile(PatientPhones *patientPhonesIndex[])
     }
 
     char line[1024];
+
+    // Read and discard the first line
+    if (fgets(line, sizeof(line), file) == NULL)
+    {
+        perror("Error reading file");
+        fclose(file);
+        return;
+    }
+
     while (fgets(line, sizeof(line), file))
     {
         size_t len = strlen(line);
