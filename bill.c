@@ -97,6 +97,8 @@ void saveBillsToFile(Bill *billIndex[])
         return;
     }
 
+    fprintf(file, "Bill ID, Appointment ID, Price\n");
+
     for (int i = 0; i < INDEX_SIZE; i++)
     {
         Bill *current = billIndex[i];

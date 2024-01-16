@@ -1,20 +1,83 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 #include "patient.h"
 #include "doctor.h"
 #include "appointment.h"
 #include "bill.h"
 #include "patientPhones.h"
 
+void *loadThread(void *arg)
+{
+    int table = *(int *) arg;
+
+    switch (table)
+    {
+    case 1:
+        loadPatientsFromFile(patientIndex);
+        break;
+    case 2:
+        loadDoctorsFromFile(doctorIndex);
+        break;
+    case 3:
+        loadAppointmentsFromFile(appointmentIndex);
+        break;
+    case 4:
+        loadBillsFromFile(billIndex);
+        break;
+    case 5:
+        loadPatientPhonesFromFile(patientPhonesIndex);
+        break;
+    default:
+        fprintf(stderr, "table\n");
+    }
+
+    return NULL;
+}
+
+void *freeThread(void *arg) {
+    int table = *(int *)arg;
+
+    switch (table)
+    {
+    case 1:
+        freePatientList(patientIndex);
+        break;
+    case 2:
+        freeDoctorList(doctorIndex);
+        break;
+    case 3:
+        freeAppointmentList(appointmentIndex);
+        break;
+    case 4:
+        freeBillList(billIndex);
+        break;
+    case 5:
+        freePatientPhonesList(patientPhonesIndex);
+        break;
+    default:
+        fprintf(stderr, "Invalid table\n");
+    }
+
+    return NULL;
+}
+
 int main(int argc, char const *argv[])
 {
     // system("clear");
-    loadPatientsFromFile(patientIndex);
-    loadDoctorsFromFile(doctorIndex);
-    loadAppointmentsFromFile(appointmentIndex);
-    loadBillsFromFile(billIndex);
-    loadPatientPhonesFromFile(patientPhonesIndex);
+    pthread_t threads[5];
+    int tables[5] = {1, 2, 3, 4, 5};
+
+    for (int i = 0; i < 5; i++)
+    {
+        pthread_create(&threads[i], NULL, loadThread, &tables[i]);
+    }
+
+    for (int i = 0; i < 5; i++)
+    {
+        pthread_join(threads[i], NULL);
+    }
 
     int choice = 0;
     printf("Welcome to the Jordanian Hospital\n");
@@ -66,11 +129,15 @@ int main(int argc, char const *argv[])
         case 6:
             system("clear");
             printf("\n\n\n Goodbye! \n\n\n");
-            freeDoctorList(doctorIndex);
-            freePatientList(patientIndex);
-            freeAppointmentList(appointmentIndex);
-            freeBillList(billIndex);
-            freePatientPhonesList(patientPhonesIndex);
+            for (int i = 0; i < 5; i++)
+            {
+                pthread_create(&threads[i], NULL, freeThread, &tables[i]);
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                pthread_join(threads[i], NULL);
+            }
             break;
         default:
             system("clear");

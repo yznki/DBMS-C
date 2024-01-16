@@ -88,6 +88,8 @@ void savePatientPhonesToFile(PatientPhones *patientPhonesIndex[])
         return;
     }
 
+    fprintf(file, "PatientSSN, Phone Number\n");
+
     for (int i = 0; i < INDEX_SIZE; i++)
     {
 

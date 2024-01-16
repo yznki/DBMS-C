@@ -90,34 +90,6 @@ void loadAppointmentsFromFile(Appointment *appointmentIndex[])
     fclose(file);
 }
 
-void *saveAppointmentsRange(void *args)
-{
-    int *range = (int *)args;
-    int start = range[0];
-    int end = range[1];
-
-    FILE *file = fopen("appointments.csv", "a");
-    if (file == NULL)
-    {
-        perror("Error opening file");
-        return NULL;
-    }
-
-    for (int i = start; i < end; i++)
-    {
-        Appointment *current = appointmentIndex[i];
-        while (current != NULL)
-        {
-            fprintf(file, "%d,%d,%d,%s\n",
-                    current->ID, current->doctorID, current->patientID, current->date);
-            current = current->next;
-        }
-    }
-
-    fclose(file);
-    return NULL;
-}
-
 void saveAppointmentsToFile(Appointment *appointmentIndex[])
 {
     FILE *file = fopen("appointments.csv", "w");
@@ -129,14 +101,16 @@ void saveAppointmentsToFile(Appointment *appointmentIndex[])
 
     fprintf(file, "Appointment ID,Doctor ID,Patient SSN,Appointment Date\n");
 
-    pthread_t threads[2];
-    int ranges[4] = {0, INDEX_SIZE / 2, INDEX_SIZE / 2, INDEX_SIZE};
-
-    pthread_create(&threads[0], NULL, saveAppointmentsRange, &ranges[0]);
-    pthread_create(&threads[1], NULL, saveAppointmentsRange, &ranges[2]);
-
-    pthread_join(threads[0], NULL);
-    pthread_join(threads[1], NULL);
+    for (int i = 0; i < INDEX_SIZE; i++)
+    {
+        Appointment *current = appointmentIndex[i];
+        while (current != NULL)
+        {
+            fprintf(file, "%d,%d,%d,%s\n",
+                    current->ID, current->doctorID, current->patientID, current->date);
+            current = current->next;
+        }
+    }
 
     fclose(file);
 }
@@ -184,6 +158,25 @@ bool existsInPatientTable(int patientID, Patient *patientIndex[])
         current = current->next;
     }
     return false;
+}
+
+void *printAppointmentInfo(void *arg)
+{
+    int *range = (int *)arg;
+    int start = range[0];
+    int end = range[1];
+
+    for (int i = start; i < end; i++)
+    {
+        Appointment *current = appointmentIndex[i];
+        while (current != NULL)
+        {
+            printf("%-15d%-15d%-15d%-20s\n", current->ID, current->doctorID, current->patientID, current->date);
+            current = current->next;
+        }
+    }
+
+    return NULL;
 }
 
 void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Patient *patientIndex[])
@@ -366,16 +359,14 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
             if (selection == 1)
             {
                 printf("%-15s%-15s%-15s%-20s\n", "Appointment ID", "Doctor ID", "Patient ID", "Date");
-                for (int i = 0; i < INDEX_SIZE; i++)
-                {
-                    Appointment *current = appointmentIndex[i];
-                    while (current != NULL)
-                    {
-                        printf("%-15d%-15d%-15d%-20s\n",
-                               current->ID, current->doctorID, current->patientID, current->date);
-                        current = current->next;
-                    }
-                }
+                pthread_t threads[2];
+                int ranges[4] = {0, INDEX_SIZE / 2, INDEX_SIZE / 2, INDEX_SIZE};
+
+                pthread_create(&threads[0], NULL, printAppointmentInfo, &ranges[0]);
+                pthread_create(&threads[1], NULL, printAppointmentInfo, &ranges[2]);
+
+                pthread_join(threads[0], NULL);
+                pthread_join(threads[1], NULL);
             }
             else if (selection == 2)
             {

@@ -122,6 +122,8 @@ void saveDoctorsToFile(Doctor *doctorIndex[])
         return;
     }
 
+    fprintf(file, "Doctor ID, Department ID, First Name, Middle Name, Last Name, Date of Birth, Gender, Phone Number, Street, City, State, Country\n");
+
     for (int i = 0; i < INDEX_SIZE; i++)
     {
         Doctor *current = doctorIndex[i];

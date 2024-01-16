@@ -1,7 +1,6 @@
-PatientSSN,First Name,Middle Name,Last Name,Date of Birth,Gender,Street,City,State,Country
+PatientSSN, First Name, Middle Name, Last Name, Date of Birth, Gender, Street, City, State, Country
 1,Alex,Mae,Smith,19-10-2006,F,26 Main St,Madaba,Jerash,Jordan
 2,Jasmine,Grace,Johnson,20-11-1945,M,87 Main St,Karak,Jerash,Jordan
-3,Alex,Rose,Brown,16-04-1981,F,4 Third St,Mafraq,Amman,Jordan
 4,John,Grace,Smith,24-10-1967,F,18 Third St,Mafraq,Aqaba,Jordan
 5,Ahmad,Omar,Johnson,01-02-1988,M,64 Third St,Ma'an,Irbid,Jordan
 6,Sarah,Grace,Williams,27-09-1979,M,79 Main St,Mafraq,Karak,Jordan

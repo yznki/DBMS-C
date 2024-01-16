@@ -120,7 +120,7 @@ void savePatientsToFile(Patient *patientIndex[])
         return;
     }
 
-    fprintf(file, "PatientSSN,First Name,Middle Name,Last Name,Date of Birth,Gender,Street,City,State,Country\n");
+    fprintf(file, "PatientSSN, First Name, Middle Name, Last Name, Date of Birth, Gender, Street, City, State, Country\n");
 
     for (int i = 0; i < INDEX_SIZE; i++)
     {
