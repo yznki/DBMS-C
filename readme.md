@@ -6,9 +6,9 @@ DBMS-C is a Hospital Management System designed to efficiently manage various op
 ## Features
 - **Patient Management**: Handle patient records with capabilities for adding, updating, and deleting information.
 - **Doctor Management**: Manage doctor details, including their addition, modification, and removal.
-- **Appointment Management**: _Feature to be implemented_ - Schedule and manage patient appointments.
-- **Billing System**: _Feature to be implemented_ - Process and track patient billing.
-- **Patient Phone Management**: _Feature to be implemented_ - Manage patient contact information.
+- **Appointment Management**: Schedule and manage patient appointments.
+- **Billing System**: Process and track patient billing.
+- **Patient Phone Management**: Manage patient contact information.
 
 ## Getting Started
 ### Prerequisites
