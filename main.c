@@ -65,7 +65,7 @@ void *freeThread(void *arg) {
 
 int main(int argc, char const *argv[])
 {
-    // system("clear");
+    system("clear");
     pthread_t threads[5];
     int tables[5] = {1, 2, 3, 4, 5};
 

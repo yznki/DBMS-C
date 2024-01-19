@@ -447,6 +447,7 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
                                 printf("%-20d%-32s%-32s%-20s\n", current->ID, dName, pName, current->date);
                                 free(dName);
                                 free(pName);
+                                found = 1;
                             }
                             current = current->next;
                         }
@@ -546,12 +547,38 @@ void appointmentTable(Appointment *appointmentIndex[], Doctor *doctorIndex[], Pa
             }
             else
             {
-                printf("Current Date: %s\n", current->date);
-                printf("Enter new Date (DD-MM-YYYY): ");
                 while (getchar() != '\n')
                     ;
-                fgets(current->date, sizeof(current->date), stdin);
-                current->date[strcspn(current->date, "\n")] = 0;
+                printf("Current Date: %s\n", current->date);
+                printf("Enter new Date (DD-MM-YYYY): ");
+
+                char tempDate[11];  
+                int isValidDate = 0;
+
+                while (!isValidDate)
+                {
+                    if (fgets(tempDate, sizeof(tempDate), stdin))
+                    {
+                        tempDate[strcspn(tempDate, "\n")] = 0;
+
+                        if (strlen(tempDate) == 10 && tempDate[2] == '-' && tempDate[5] == '-')
+                        {
+                            isValidDate = 1;
+                        }
+                        else
+                        {
+                            printf("Invalid format.\n\nPlease enter the date in DD-MM-YYYY format: ");
+                        }
+                    }
+                    else
+                    {
+                        while (getchar() != '\n')
+                            ;
+                        printf("Input too long.\n\nPlease enter the date in DD-MM-YYYY format: ");
+                    }
+                }
+
+                strcpy(current->date, tempDate);
                 printf("Date updated to %s for Appointment ID %d.\n", current->date, appointmentID);
             }
 

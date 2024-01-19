@@ -269,9 +269,15 @@ void doctorTable(Doctor *doctorIndex[])
                     }
                 } while (newDoctor.gender != 'M' && newDoctor.gender != 'F');
 
-                printf("Enter Phone Number: ");
+                printf("Enter Phone Number (+962xxxxxxxxx)*: ");
                 fgets(newDoctor.phoneNumber, sizeof(newDoctor.phoneNumber), stdin);
                 newDoctor.phoneNumber[strcspn(newDoctor.phoneNumber, "\n")] = 0;
+
+                if (!isValidPhoneNumberFormat(newDoctor.phoneNumber))
+                {
+                    printf("\nInvalid phone number format.\nTry Again...\n\n");
+                    continue;
+                }
 
                 printf("Enter Street Name: ");
                 fgets(newDoctor.street, sizeof(newDoctor.street), stdin);
@@ -497,7 +503,7 @@ void doctorTable(Doctor *doctorIndex[])
                 case 3:
                 {
                     char name[256];
-                    printf("Enter Name: ");
+                    printf("Enter First Name: ");
                     while (getchar() != '\n')
                         ;
                     fgets(name, sizeof(name), stdin);
@@ -599,9 +605,23 @@ void doctorTable(Doctor *doctorIndex[])
                     printf("Name updated.\n");
                     break;
 
-                case 3:
-                    printf("Enter new Phone Number (+9627xxxxxxxx): ");
-                    scanf("%s", currentToUpdate->phoneNumber);
+                case 3:;
+                    char number[13];
+
+                    do
+                    {
+                        printf("Enter new Phone Number (+9627xxxxxxxx): ");
+                        scanf("%s", number);
+                        if (!isValidPhoneNumberFormat(number))
+                        {
+                            printf("\nInvalid phone number format.\nTry Again...\n\n");
+                            continue;
+                        }
+                        break;
+
+                    } while (1);
+                    
+                    strcpy(currentToUpdate->phoneNumber, number);
                     printf("Phone number updated.\n");
                     break;
 

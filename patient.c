@@ -553,7 +553,7 @@ void patientTable(Patient *patientIndex[])
                 int updateChoice;
                 printf("Select field to update:\n");
                 printf("1- First Name\n");
-                printf("2- Phone Number\n");
+                printf("2- Country Address\n");
                 scanf("%d", &updateChoice);
 
                 switch (updateChoice)
@@ -581,8 +581,8 @@ void patientTable(Patient *patientIndex[])
                     break;
                 }
 
-                printf("Updated Record: SSN: %d, Name: %s, Country: %s\n",
-                       current->patientSSN, current->fname, current->country);
+                printf("Updated Record: SSN: %d, Name: %s %s, Country: %s\n",
+                       current->patientSSN, current->fname, current->lname, current->country);
             }
 
             printf("\n\nEnter any key to continue\n\n");
