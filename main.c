@@ -98,36 +98,36 @@ int main(int argc, char const *argv[])
         {
         case 1:
             system("clear");
-            patientTable(patientIndex);
+            patientTable(patientIndex, patientPhonesIndex, appointmentIndex);
             system("clear");
-            savePatientsToFile(patientIndex);
             break;
         case 2:
             system("clear");
-            doctorTable(doctorIndex);
+            doctorTable(doctorIndex, appointmentIndex);
             system("clear");
-            saveDoctorsToFile(doctorIndex);
             break;
         case 3:
             system("clear");
             appointmentTable(appointmentIndex, doctorIndex, patientIndex);
             system("clear");
-            saveAppointmentsToFile(appointmentIndex);
             break;
         case 4:
             system("clear");
             billTable(billIndex, appointmentIndex);
             system("clear");
-            saveBillsToFile(billIndex);
             break;
         case 5:
             system("clear");
             patientPhonesTable(patientPhonesIndex, patientIndex);
             system("clear");
-            savePatientPhonesToFile(patientPhonesIndex);
             break;
         case 6:
             system("clear");
+            savePatientPhonesToFile(patientPhonesIndex);
+            saveBillsToFile(billIndex);
+            saveAppointmentsToFile(appointmentIndex);
+            saveDoctorsToFile(doctorIndex);
+            savePatientsToFile(patientIndex);
             printf("\n\n\n Goodbye! \n\n\n");
             for (int i = 0; i < 5; i++)
             {

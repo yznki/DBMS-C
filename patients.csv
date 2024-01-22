@@ -1,6 +1,5 @@
 PatientSSN, First Name, Middle Name, Last Name, Date of Birth, Gender, Street, City, State, Country
 1,Tahboub,Mae,Smith,19-10-2006,F,26 Main St,Madaba,Jerash,USA
-2,Jasmine,Grace,Johnson,20-11-1945,M,87 Main St,Karak,Jerash,Jordan
 3,Yazan,,Mamoun,13-04-2003,F,Al Nakheel,Somewhere,Amman,Jordan
 5,Ahmad,Omar,Johnson,01-02-1988,M,64 Third St,Ma'an,Irbid,Jordan
 6,Sarah,Grace,Williams,27-09-1979,M,79 Main St,Mafraq,Karak,Jordan
@@ -9,12 +8,9 @@ PatientSSN, First Name, Middle Name, Last Name, Date of Birth, Gender, Street, C
 9,Alex,Rose,Miller,24-07-2002,M,49 Third St,Madaba,Madaba,Jordan
 10,Alex,Rose,Williams,13-12-1960,F,48 Main St,Jerash,Aqaba,Jordan
 11,Mohammad,Omar,Johnson,22-05-1956,M,12 Main St,Madaba,Ma'an,Jordan
-12,Mohammad,Mae,Smith,22-10-1994,M,63 Third St,Zarqa,Karak,Jordan
-14,Liam,Omar,Williams,02-07-1960,M,64 Third St,Zarqa,Zarqa,Jordan
 15,Ahmad,Omar,Martinez,18-06-1983,F,90 Second St,Aqaba,Aqaba,Jordan
 16,Jasmine,Grace,Garcia,13-02-1940,M,21 Third St,Amman,Karak,Jordan
 17,John,Grace,Garcia,09-05-1949,F,36 Main St,Zarqa,Zarqa,Jordan
-18,Emma,,Williams,12-02-1999,F,65 Main St,Mafraq,Ma'an,Jordan
 19,Sarah,Mae,Garcia,02-08-1988,F,19 Third St,Jerash,Irbid,Jordan
 20,Mohammad,Omar,Johnson,19-05-1990,F,38 Third St,Irbid,Zarqa,Jordan
 21,Liam,Rose,Garcia,21-04-1961,F,25 Main St,Ma'an,Amman,Jordan

@@ -1,4 +1,5 @@
 #include "doctor.h"
+#include "appointment.h"
 #include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -155,7 +156,41 @@ void freeDoctorList(Doctor *doctorIndex[])
     }
 }
 
-void doctorTable(Doctor *doctorIndex[])
+void deleteDoctorFromAppointments(Appointment *appointmentIndex[], int ID)
+{
+
+    for (int i = 0; i < INDEX_SIZE; i++)
+    {
+        Appointment *current = appointmentIndex[i];
+        Appointment *previous = NULL;
+
+        while (current != NULL)
+        {
+            if (current->patientID == ID)
+            {
+                if (previous == NULL)
+                {
+                    appointmentIndex[i] = current->next;
+                }
+                else
+                {
+                    previous->next = current->next;
+                }
+
+                Appointment *temp = current;
+                current = current->next;
+                free(temp);
+            }
+            else
+            {
+                previous = current;
+                current = current->next;
+            }
+        }
+    }
+}
+
+void doctorTable(Doctor *doctorIndex[], Appointment *appointmentIndex[])
 {
     Doctor doctorRecord;
     int choice = 0;
@@ -362,6 +397,7 @@ void doctorTable(Doctor *doctorIndex[])
                             }
                             free(current);
                             printf("\nDoctor with ID %d deleted.\n", doctorID);
+                            deleteDoctorFromAppointments(appointmentIndex, doctorID);
                             break;
                         }
                         prev = current;

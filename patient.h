@@ -1,6 +1,9 @@
 #ifndef PATIENT_H
 #define PATIENT_H
 
+struct PatientPhones;
+struct Appointment;
+
 typedef struct Patient
 {
     int patientSSN;
@@ -15,6 +18,6 @@ Patient *patientIndex[100];
 void loadPatientsFromFile(Patient *patientIndex[]);
 void savePatientsToFile(Patient *patientIndex[]);
 void freePatientList(Patient *patientIndex[]);
-void patientTable(Patient *patientIndex[]);
+void patientTable(Patient *patientIndex[], struct PatientPhones *patientPhonesIndex[], struct Appointment *appointmentIndex[]);
 
 #endif

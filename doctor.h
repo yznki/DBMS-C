@@ -1,6 +1,8 @@
 #ifndef DOCTOR_H
 #define DOCTOR_H
 
+struct Appointment;
+
 typedef struct Doctor
 {
     int doctorID, departmentID;
@@ -15,6 +17,6 @@ Doctor *doctorIndex[100];
 void loadDoctorsFromFile(Doctor *doctorIndex[]);
 void saveDoctorsToFile(Doctor *doctorIndex[]);
 void freeDoctorList(Doctor *doctorIndex[]);
-void doctorTable(Doctor *doctorIndex[]);
+void doctorTable(Doctor *doctorIndex[], struct Appointment *appointmentIndex[]);
 
 #endif

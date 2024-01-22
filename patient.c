@@ -1,5 +1,7 @@
 #include "patient.h"
 #include "utils.h"
+#include "appointment.h"
+#include "patientPhones.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -165,7 +167,7 @@ void *printPatientInfo(void *arg)
         while (current != NULL)
         {
             char fullName[512], address[512];
-            if (strcmp(current->mname, "") == 0) // Check if middle name is empty
+            if (strcmp(current->mname, "") == 0) 
                 sprintf(fullName, "%s %s", current->fname, current->lname);
             else
                 sprintf(fullName, "%s %s %s", current->fname, current->mname, current->lname);
@@ -181,7 +183,75 @@ void *printPatientInfo(void *arg)
     return NULL;
 }
 
-void patientTable(Patient *patientIndex[])
+void deletePatientFromAppointments(Appointment *appointmentIndex[], int ssn)
+{   
+
+    for (int i = 0; i < INDEX_SIZE; i++)
+    {
+        Appointment *current = appointmentIndex[i];
+        Appointment *previous = NULL;
+
+        while (current != NULL)
+        {
+            if (current->patientID == ssn)
+            {
+                if (previous == NULL)
+                {
+                    appointmentIndex[i] = current->next;
+                }
+                else
+                {
+                    previous->next = current->next;
+                }
+
+                Appointment *temp = current;
+                current = current->next;
+                free(temp);
+            }
+            else
+            {
+                previous = current;
+                current = current->next;
+            }
+        }
+    }
+    
+}
+
+void deleteFromPatientPhones(PatientPhones *patientPhonesIndex[], int ssn){
+
+    for (int i = 0; i < INDEX_SIZE; i++)
+    {
+        PatientPhones *current = patientPhonesIndex[i];
+        PatientPhones *previous = NULL;
+
+        while (current != NULL)
+        {
+            if (current->patientSSN == ssn)
+            {
+                if (previous == NULL)
+                {
+                    patientPhonesIndex[i] = current->next;
+                }
+                else
+                {
+                    previous->next = current->next;
+                }
+
+                PatientPhones *temp = current;
+                current = current->next;
+                free(temp);
+            }
+            else
+            {
+                previous = current;
+                current = current->next;
+            }
+        }
+    }
+}
+
+void patientTable(Patient *patientIndex[], PatientPhones *patientPhonesIndex[], Appointment *appointmentIndex[])
 {
 
     Patient patientRecord;
@@ -368,10 +438,12 @@ void patientTable(Patient *patientIndex[])
                         patientIndex[index] = current->next;
                         free(current);
                         printf("\n\nPatient with SSN %d deleted.\n\n", patientID);
+                        deletePatientFromAppointments(appointmentIndex, patientID);
+                        deleteFromPatientPhones(patientPhonesIndex, patientID);
                     }
                     else
                     {
-                        // Search for the patient to be deleted, keep track of the node just before the one to be deleted
+
                         while (current != NULL && current->next != NULL && current->next->patientSSN != patientID)
                         {
                             current = current->next;
@@ -388,6 +460,8 @@ void patientTable(Patient *patientIndex[])
                             current->next = temp->next;
                             free(temp);
                             printf("\n\nPatient with SSN %d deleted.\n\n", patientID);
+                            deletePatientFromAppointments(appointmentIndex, patientID);
+                            deleteFromPatientPhones(patientPhonesIndex, patientID);
                         }
                     }
                 }
