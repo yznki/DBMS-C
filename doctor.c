@@ -294,6 +294,8 @@ void insertDoctor()
         if (!isValidPhoneNumberFormat(newDoctor.phoneNumber))
         {
             printf("\nInvalid phone number format.\nTry Again...\n\n");
+            while (getchar() != '\n')
+                ;
             continue;
         }
 
