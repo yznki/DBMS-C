@@ -19,6 +19,7 @@ PatientSSN, First Name, Middle Name, Last Name, Date of Birth, Gender, Street, C
 21,Liam,Rose,Garcia,21-04-1961,F,25 Main St,Ma'an,Amman,Jordan
 22,Ahmad,,Smith,02-02-1961,F,94 Main St,Irbid,Amman,Jordan
 23,Liam,,Smith,25-05-1962,M,90 Second St,Ma'an,Aqaba,Jordan
+123,Test,,Test,01-01-2001,M,,,,
 24,Sarah,Omar,Miller,18-05-1992,M,21 Third St,Ma'an,Tafilah,Jordan
 25,Jasmine,Mae,Johnson,05-03-2003,M,66 Second St,Karak,Mafraq,Jordan
 26,Jasmine,Omar,Williams,02-07-1971,F,23 Main St,Madaba,Jerash,Jordan

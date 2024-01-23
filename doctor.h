@@ -6,8 +6,8 @@ struct Appointment;
 typedef struct Doctor
 {
     int doctorID, departmentID;
-    char fname[256], mname[256], lname[256], DOB[256];
-    char genderStr[3], phoneNumber[15], street[256], city[256], state[256], country[256];
+    char fname[512], mname[512], lname[512], DOB[512];
+    char genderStr[3], phoneNumber[15], street[512], city[512], state[512], country[512];
     char gender;
     struct Doctor *next;
 } Doctor;

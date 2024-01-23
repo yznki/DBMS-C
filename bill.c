@@ -16,7 +16,7 @@ void loadBillsFromFile(Bill *billIndex[])
         return;
     }
 
-    char line[1024];
+    char line[2048];
 
     // Read and discard the first line
     if (fgets(line, sizeof(line), file) == NULL)

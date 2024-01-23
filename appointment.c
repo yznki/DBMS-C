@@ -12,7 +12,7 @@
 void loadAppointmentsFromFile(Appointment *appointmentIndex[])
 {
     FILE *file = fopen("appointments.csv", "r");
-    char line[1024];
+    char line[2048];
     if (file == NULL)
     {
         perror("Error opening file");

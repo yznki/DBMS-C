@@ -10,7 +10,7 @@
 void loadPatientsFromFile(Patient *patientIndex[])
 {
     FILE *file = fopen("patients.csv", "r");
-    char line[1024];
+    char line[2048];
     if (file == NULL)
     {
         perror("Error opening file");
@@ -48,7 +48,7 @@ void loadPatientsFromFile(Patient *patientIndex[])
             size_t len = ptr - start;
             if (len > 0)
             {
-                char temp[256] = {0};
+                char temp[512] = {0};
                 strncpy(temp, start, len < sizeof(temp) ? len : sizeof(temp) - 1);
 
                 switch (field)

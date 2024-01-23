@@ -17,7 +17,7 @@ void loadPatientPhonesFromFile(PatientPhones *patientPhonesIndex[])
         return;
     }
 
-    char line[1024];
+    char line[2048];
 
     // Read and discard the first line
     if (fgets(line, sizeof(line), file) == NULL)
@@ -358,7 +358,7 @@ void searchPatientPhone()
     }
     case 2:
     {
-        char searchPhone[256];
+        char searchPhone[512];
         printf("Enter Phone Number: ");
         while (getchar() != '\n')
             ;
@@ -437,7 +437,7 @@ void updatePatientPhone()
         return;
     }
 
-    char newPhoneNumber[256];
+    char newPhoneNumber[512];
 
     while (getchar() != '\n')
         ;

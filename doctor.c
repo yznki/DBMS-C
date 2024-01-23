@@ -8,7 +8,7 @@
 void loadDoctorsFromFile(Doctor *doctorIndex[])
 {
     FILE *file = fopen("doctors.csv", "r");
-    char line[1024];
+    char line[2048];
     if (file == NULL)
     {
         perror("Error opening file");

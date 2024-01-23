@@ -6,7 +6,7 @@
 typedef struct Appointment
 {
     int ID, doctorID, patientID;
-    char date[256];
+    char date[512];
     struct Appointment *next;
 } Appointment;
 
